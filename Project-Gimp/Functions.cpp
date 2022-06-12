@@ -33,13 +33,17 @@ Mat chooseOriginalImage()
 
 string chooseTransformation()
 {
-	string correct_values[6];
+	string correct_values[10];
 	correct_values[0] = "1";
 	correct_values[1] = "2";
 	correct_values[2] = "3";
 	correct_values[3] = "4";
 	correct_values[4] = "5";
 	correct_values[5] = "6";
+	correct_values[6] = "7";
+	correct_values[7] = "8";
+	correct_values[8] = "9";
+	correct_values[9] = "10";
 
 	string choice;
 	
@@ -52,6 +56,10 @@ string chooseTransformation()
 		cout << "4- Deformation" << endl;
 		cout << "5- Crop" << endl;
 		cout << "6- Brightness & Contrast" << endl;
+		cout << "7- Canny edge detection" << endl;
+		cout << "8- Erosion" << endl;
+		cout << "9- Dilation" << endl;
+		cout << "10- Panorama / Stitching" << endl;
 		cout << "Choice: ";
 		cin >> choice;
 
@@ -96,6 +104,22 @@ Mat applyTransformation(string choice, Mat image)
 
 		case 6:
 			new_image = brightnessAndContrast(image);
+			break;
+
+		case 7:
+			new_image = cannyEdgeDetection(image);
+			break;
+
+		case 8:
+			new_image = erosionImage(image);
+			break;
+
+		case 9:
+			new_image = dilationImage(image);
+			break;
+
+		case 10:
+			new_image = panoramaStiching(chooseImagesForPanorama(image));
 			break;
 
 		default:

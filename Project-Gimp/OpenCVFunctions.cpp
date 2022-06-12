@@ -218,3 +218,203 @@ Mat brightnessAndContrast(Mat image)
     destroyAllWindows();
     return image_BC;
 }
+
+
+Mat cannyEdgeDetection(Mat image)
+{
+    Mat image_canny;
+    int lowThreshold = 0;
+
+    namedWindow("Controller", WINDOW_AUTOSIZE);
+    namedWindow("Canny edge detection", WINDOW_AUTOSIZE);
+
+    createTrackbar("Threshold ", "Controller", &lowThreshold, 100);
+
+    while (true)
+    {
+        Mat image_BW = blackAndWhite(image);
+
+        Mat image_blur;
+        GaussianBlur(image_BW, image_blur, Size(5, 5), 1.5);
+
+        Canny(image_blur, image_canny, lowThreshold, lowThreshold * 3, 3);
+        
+        imshow("Canny edge detection", image_canny);
+
+        if (waitKey(10) == 27)
+        {
+            break;
+        }
+    }
+
+    destroyAllWindows();
+    return image_canny;
+}
+
+
+Mat erosionImage(Mat image)
+{
+    Mat image_erosion;
+    int erosion_elem = 0;
+    int erosion_size = 0;
+
+    namedWindow("Controller", WINDOW_AUTOSIZE);
+    namedWindow("Erosion", WINDOW_AUTOSIZE);
+
+    createTrackbar("Element ", "Controller", &erosion_elem, 2);
+    createTrackbar("Size ", "Controller", &erosion_size, 10);
+
+    while (true)
+    {
+        int erosion_type;
+
+        if (erosion_elem == 0)
+        {
+            erosion_type = MORPH_RECT;
+        }
+
+        else if (erosion_elem == 1)
+        {
+            erosion_type = MORPH_CROSS;
+        }
+
+        else if (erosion_elem == 2)
+        {
+            erosion_type = MORPH_ELLIPSE;
+        }
+
+        Mat element = getStructuringElement(erosion_type, Size(2 * erosion_size + 1, 2 * erosion_size + 1), Point(erosion_size, erosion_size));
+        erode(image, image_erosion, element);
+
+        imshow("Erosion", image_erosion);
+
+        if (waitKey(10) == 27)
+        {
+            break;
+        }
+    }
+
+    destroyAllWindows();
+    return image_erosion;
+}
+
+
+Mat dilationImage(Mat image)
+{
+    Mat image_dilation;
+    int dilation_elem = 0;
+    int dilation_size = 0;
+
+    namedWindow("Controller", WINDOW_AUTOSIZE);
+    namedWindow("Dilation", WINDOW_AUTOSIZE);
+
+    createTrackbar("Element ", "Controller", &dilation_elem, 2);
+    createTrackbar("Size ", "Controller", &dilation_size, 10);
+
+    while (true)
+    {
+        int dilation_type;
+
+        if (dilation_elem == 0)
+        {
+            dilation_type = MORPH_RECT;
+        }
+
+        else if (dilation_elem == 1)
+        {
+            dilation_type = MORPH_CROSS;
+        }
+
+        else if (dilation_elem == 2)
+        {
+            dilation_type = MORPH_ELLIPSE;
+        }
+
+        Mat element = getStructuringElement(dilation_type, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
+        dilate(image, image_dilation, element);
+
+        imshow("Dilation", image_dilation);
+
+        if (waitKey(10) == 27)
+        {
+            break;
+        }
+    }
+
+    destroyAllWindows();
+    return image_dilation;
+}
+
+
+Mat panoramaStiching(vector<Mat> images) {
+    Mat panorama;
+    Stitcher::Mode mode = Stitcher::PANORAMA;
+    Ptr<Stitcher> stitcher = Stitcher::create(mode);
+    Stitcher::Status status = stitcher->stitch(images, panorama);
+    for (int i = 0; i < 2; i++) {
+        namedWindow("Display window1", WINDOW_AUTOSIZE);
+        namedWindow("Display window", WINDOW_AUTOSIZE);
+        imshow("Display window", images[0]);
+        imshow("Display window1", images[1]);
+    }
+
+    waitKey(0);
+    destroyAllWindows();
+    if (status != Stitcher::OK) {
+        cout << "not stitchable";
+    }
+
+    namedWindow("Display window", WINDOW_AUTOSIZE);
+    imshow("Display window", panorama);
+
+    waitKey(0); // Wait for any keystroke in the window
+
+    destroyWindow("Display window"); //destroy the created window
+
+    return panorama;
+}
+
+vector<Mat> chooseImagesForPanorama(Mat image)
+{
+    string path;
+    vector<Mat> images;
+    images.push_back(image);
+
+
+
+    while (path != "1")
+    {
+
+        cout << "When you have finished chosen your pictures enter 1! ";
+        cout << "Location of your image: ";
+        cin >> path;
+
+
+        if (path != "1") {
+            Mat image = imread(path);
+            if (image.empty())
+            {
+                cout << "Incorrect location." << endl;
+            }
+            else {
+                images.push_back(image);
+            }
+        }
+        cout << endl;
+    }
+    return images;
+
+}
+
+bool isStitchable(vector<Mat> images) {
+    Mat panorama;
+    Stitcher::Mode mode = Stitcher::PANORAMA;
+    Ptr<Stitcher> stitcher = Stitcher::create(mode);
+    Stitcher::Status status = stitcher->stitch(images, panorama);
+    if (status != Stitcher::OK) {
+        cout << "not stitchable";
+        return false;
+    }
+    return true;
+}
+

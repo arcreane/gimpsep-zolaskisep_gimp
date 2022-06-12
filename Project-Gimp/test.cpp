@@ -4,63 +4,48 @@
 //using namespace cv;
 //using namespace std;
 //
+//vector<Mat> chooseImagesForPanorama(Mat image)
+//{
+//    string path;
+//    vector<Mat> images;
+//    images.push_back(image);
+//
+//    while (path != "1")
+//    {
+//
+//        cout << "When you have finished chosen your pictures enter 1!";
+//        cout << "Location of your image: ";
+//        cin >> path;
+//
+//        Mat image = imread(path);
+//
+//        if (image.empty())
+//        {
+//            cout << "Incorrect location." << endl;
+//        }
+//        else {
+//            images.push_back(image);
+//        }
+//
+//        cout << endl;
+//    }
+//
+//    return images;
+//}
+//
+//Mat panoramaStiching(vector<Mat> images)
+//{
+//    Mat panorama;
+//    Stitcher::Mode mode = Stitcher::PANORAMA;
+//    Ptr<Stitcher> stitcher = Stitcher::create(mode);
+//    Stitcher::Status status = stitcher->stitch(images, panorama);
+//    return panorama;
+//}
+//
 //
 //int main()
 //{
-//	//VideoCapture cap(0);
-//	//Mat img;
-//
-//	//while (true)
-//	//{
-//	//	cap.read(img);
-//	//	imshow("Image", img);
-//	//	waitKey(1);
-//	//}
-//
-//    // open the video file for reading
-//    Mat img = imread("malo.jpg");;
-//
-//    // if not success, exit program
-//
-//    //define original and rotate window name
-//    namedWindow("original", WINDOW_AUTOSIZE);
-//    namedWindow("rotate", WINDOW_AUTOSIZE);
-//
-//    int iAngle = 180;
-//
-//    //create track bar
-//    createTrackbar("Rotation", "rotate", &iAngle, 360);
-//    Mat frame_rotate;
-//
-//    while (true)
-//    {
-//        //rotate
-//        Point2f center(img.cols / 2, img.rows / 2);
-//        double rotationAngle = iAngle;
-//        double scale = 1;
-//
-//        Mat M = getRotationMatrix2D(center, rotationAngle, scale);
-//        warpAffine(img, frame_rotate, M, img.size());
-//
-//
-//        //show the two video
-//        imshow("original", img);
-//        imshow("rotate", frame_rotate);
-//
-//
-//
-//        //wait for 'esc' key press for 30 ms. If 'esc' key is pressed, break loop
-//        if (waitKey(30) == 27)
-//        {
-//            cout << "Esc key is pressed by user. Stoppig the video" << endl;
-//            break;
-//        }
-//
-//    }
-//
-//        imwrite("HappyFishGrey.jpg", frame_rotate);
-//
-//
-//
-//	return 0;
+//    return 0;
 //}
+
+
